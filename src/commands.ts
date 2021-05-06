@@ -1171,6 +1171,11 @@ export class CommandCenter {
     this.outputChannel.show();
   }
 
+  @command('hg.showDiff', { repository: true })
+  showDiff(): void {
+    this.outputChannel.show();
+  }
+
   createLogMenuAPI(repository: Repository): LogMenuAPI {
     return {
       getRepoName: () => repository.repoName,
@@ -1180,7 +1185,7 @@ export class CommandCenter {
         repository.getCommitDetails(revision),
       getLogEntries: (options: LogEntriesOptions) =>
         repository.getLogEntries(options),
-      diffToLocal: (file: IFileStatus, commit: CommitDetails) => {},
+      diffToLocal: (file: IFileStatus, commit: CommitDetails) => { },
       diffToParent: (file: IFileStatus, commit: CommitDetails) =>
         this.diffFile(repository, commit.parent1, commit, file)
     };

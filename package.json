@@ -1,20 +1,20 @@
 {
   "name": "hg",
-  "publisher": "vivekvijayan",
+  "publisher": "sihingbenni",
   "displayName": "Hg",
   "description": "Integrated Mercurial source control",
   "galleryBanner": {
     "color": "#999999",
     "theme": "dark"
   },
-  "homepage": "https://github.com/vivekvjn/vscode-hg/blob/master/README.md",
+  "homepage": "https://github.com/sihingbenni/vscode-hg/blob/master/README.md",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vivekvjn/vscode-hg.git"
+    "url": "https://github.com/sihingbenni/vscode-hg.git"
   },
   "bugs": {
-    "url": "https://github.com/vivekvjn/vscode-hg/issues"
+    "url": "https://github.com/sihingbenni/vscode-hg/issues"
   },
   "version": "2.0.4",
   "engines": {
@@ -263,6 +263,11 @@
         "category": "Hg"
       },
       {
+        "command": "hg.showDiff",
+        "title": "%command.showDiff%",
+        "category": "Hg"
+      },
+      {
         "command": "hg.stage",
         "title": "%command.stage%",
         "category": "Hg",
@@ -433,6 +438,10 @@
           "when": "config.hg.enabled && hgOpenRepositoryCount != 0"
         },
         {
+          "command": "hg.showDiff",
+          "when": "config.hg.enabled && hgOpenRepositoryCount != 0"
+        },
+        {
           "command": "hg.fileLog",
           "when": "config.hg.enabled && hgOpenRepositoryCount != 0"
         },
@@ -522,6 +531,11 @@
         {
           "command": "hg.showOutput",
           "group": "6_output",
+          "when": "config.hg.enabled && scmProvider == hg"
+        },
+        {
+          "command": "hg.showDiff",
+          "group": "7_diff",
           "when": "config.hg.enabled && scmProvider == hg"
         }
       ],
