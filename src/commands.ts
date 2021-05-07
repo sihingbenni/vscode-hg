@@ -76,6 +76,8 @@ import { partition } from './util';
 import * as nls from 'vscode-nls';
 import typedConfig from './config';
 import { toHgUri } from './uri';
+import { diffieHellman } from 'crypto';
+import { exit } from 'process';
 
 const localize = nls.loadMessageBundle();
 
@@ -1172,8 +1174,11 @@ export class CommandCenter {
   }
 
   @command('hg.showDiff', { repository: true })
-  showDiff(): void {
-    this.outputChannel.show();
+  async showDiff(repository: Repository): Promise<void> {
+    const branches = await repository.getBranches();
+    const chosenBranch = await interaction.pickBranch(branches);
+    await repository.diffWithBranch(chosenBranch); // TODO use results and show diff
+
   }
 
   createLogMenuAPI(repository: Repository): LogMenuAPI {

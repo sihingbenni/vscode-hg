@@ -124,7 +124,7 @@ export interface HgFindAttemptLogger {
 }
 
 export class HgFinder {
-  constructor(private logger: HgFindAttemptLogger) {}
+  constructor(private logger: HgFindAttemptLogger) { }
 
   private logAttempt(path: string) {
     this.logger.log(path);
@@ -611,7 +611,7 @@ export interface CommitDetails extends Commit {
 }
 
 export class Repository {
-  constructor(private _hg: Hg, private repositoryRoot: string) {}
+  constructor(private _hg: Hg, private repositoryRoot: string) { }
 
   get hg(): Hg {
     return this._hg;
@@ -826,6 +826,18 @@ export class Repository {
 
       throw err;
     }
+  }
+
+  async diffWith(branchName: string, opts?: { filePath: string }): Promise<void> {
+    const args = ['diff', '-r'];
+    args.push(branchName);
+
+    try {
+      await this.run(args);
+    } catch (err) {
+      throw err;
+    }
+    return;
   }
 
   async revert(paths: string[]): Promise<void> {

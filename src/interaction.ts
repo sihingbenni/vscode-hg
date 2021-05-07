@@ -36,7 +36,7 @@ const SHORT_HASH_LENGTH = 12;
 const BULLET = '\u2022';
 const NBSP = '\u00a0';
 
-const NOOP = function() {};
+const NOOP = function () { };
 
 export const enum BranchExistsAction {
   None,
@@ -414,6 +414,15 @@ export namespace interaction {
     return choice && choice.commit;
   }
 
+  export async function pickBranch(branchChoices: Ref[]): Promise<string | undefined> {
+    let branches = [];
+    branchChoices.forEach((function (value) {
+      branches.push(value.name);
+    }));
+    const choice = await window.showQuickPick(branches);
+    return choice;
+  }
+
   export async function pickUpdateRevision(
     refs: Ref[],
     unclean: boolean = false
@@ -422,30 +431,29 @@ export namespace interaction {
 
     const branches = !useBookmarks
       ? refs
-          .filter(ref => ref.type === RefType.Branch)
-          .map(ref => new UpdateRefItem(ref))
+        .filter(ref => ref.type === RefType.Branch)
+        .map(ref => new UpdateRefItem(ref))
       : [];
 
     const bookmarks = useBookmarks
       ? refs
-          .filter(ref => ref.type === RefType.Bookmark)
-          .map(ref => new UpdateBookmarkItem(ref))
+        .filter(ref => ref.type === RefType.Bookmark)
+        .map(ref => new UpdateBookmarkItem(ref))
       : [];
 
     const tags = !useBookmarks
       ? refs
-          .filter(ref => ref.type === RefType.Tag)
-          .map(ref => new UpdateTagItem(ref))
+        .filter(ref => ref.type === RefType.Tag)
+        .map(ref => new UpdateTagItem(ref))
       : [];
 
     const picks = [...branches, ...bookmarks, ...tags];
     const revType = useBookmarks ? 'bookmark' : 'branch/tag';
 
-    const placeHolder = `Select a ${revType} to update to: ${
-      unclean
-        ? '(only showing local bookmarks while working directory unclean)'
-        : ''
-    }`;
+    const placeHolder = `Select a ${revType} to update to: ${unclean
+      ? '(only showing local bookmarks while working directory unclean)'
+      : ''
+      }`;
     const choice = await window.showQuickPick<UpdateRefItem>(picks, {
       placeHolder
     });
@@ -466,9 +474,8 @@ export namespace interaction {
   }
 
   function describeCommitOneLine(commit: Commit): string {
-    return `#${commit.revision} ${BULLET} ${
-      commit.author
-    }, ${humanise.ageFromNow(commit.date)} ${BULLET} ${commit.message}`;
+    return `#${commit.revision} ${BULLET} ${commit.author
+      }, ${humanise.ageFromNow(commit.date)} ${BULLET} ${commit.message}`;
   }
 
   function asLabelItem(
@@ -540,11 +547,11 @@ export namespace interaction {
   ): Promise<Bookmark | undefined> {
     const picks = bookmarks.map(
       b =>
-        ({
-          label: `$(bookmark) ${b.name}`,
-          description: b.commit,
-          bookmark: b
-        } as BookmarkQuickPick)
+      ({
+        label: `$(bookmark) ${b.name}`,
+        description: b.commit,
+        bookmark: b
+      } as BookmarkQuickPick)
     );
     const placeHolder = localize('pick bookmark', 'Pick a bookmark to remove:');
     const choice = await window.showQuickPick<BookmarkQuickPick>(picks, {
@@ -921,7 +928,7 @@ class CommitItem implements RunnableQuickPickItem {
   constructor(
     public readonly commit: Commit,
     protected useBookmarks: boolean
-  ) {}
+  ) { }
   get shortHash() {
     return (this.commit.hash || '').substr(0, SHORT_HASH_LENGTH);
   }
@@ -942,7 +949,7 @@ class CommitItem implements RunnableQuickPickItem {
   get description() {
     return this.commit.message;
   }
-  run() {}
+  run() { }
 }
 
 class LogEntryItem extends CommitItem {
@@ -995,7 +1002,7 @@ class UpdateRefItem implements QuickPickItem {
     return this.shortCommit;
   }
 
-  constructor(protected ref: Ref) {}
+  constructor(protected ref: Ref) { }
 
   async run(repository: Repository): Promise<void> {
     const ref = this.treeish;

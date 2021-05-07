@@ -261,7 +261,7 @@ export class Resource implements SourceControlResourceState {
     private _status: Status,
     private _mergeStatus: MergeStatus,
     private _renameResourceUri?: Uri
-  ) {}
+  ) { }
 }
 
 export const enum Operation {
@@ -821,6 +821,10 @@ export class Repository implements IDisposable {
     });
   }
 
+  async diffWithBranch(branch: string): Promise<void> {
+    await this.repository.diffWith(branch);
+  }
+
   async cleanOrUpdate(...resources: Uri[]) {
     const parents = await this.getParents();
     if (parents.length > 1) {
@@ -1343,6 +1347,11 @@ export class Repository implements IDisposable {
   }
 
   @throttle
+  public async getBranches(): Promise<Ref[]> {
+    return await this.repository.getBranches();
+  }
+
+  @throttle
   public getParents(revision?: string): Promise<Commit[]> {
     return this.repository.getParents(revision);
   }
@@ -1445,8 +1454,8 @@ export class Repository implements IDisposable {
     const currentRefPromise:
       | Promise<Bookmark | undefined>
       | Promise<Ref | undefined> = useBookmarks
-      ? this.repository.getActiveBookmark()
-      : this.repository.getCurrentBranch();
+        ? this.repository.getActiveBookmark()
+        : this.repository.getCurrentBranch();
 
     const [fileStatuses, currentRef, resolveStatuses] = await Promise.all([
       this.repository.getStatus(),
